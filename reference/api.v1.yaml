@@ -27,6 +27,10 @@ paths:
                       size: 1702
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/upload-error'
       operationId: post-file
       parameters:
         - schema:
@@ -53,7 +57,9 @@ paths:
     delete:
       summary: Delete file
       tags: []
-      responses: {}
+      responses:
+        '200':
+          description: OK
       operationId: delete-file
       description: Deletes the file specified form the server
       security:
@@ -108,12 +114,19 @@ components:
       required:
         - result
         - file
-    upload-EEXIST:
+    upload-error:
       title: upload-EEXIST
       type: object
       properties:
-        id:
-          type: string
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+      x-examples:
+        EEXIST: {}
   securitySchemes:
     password:
       name: password

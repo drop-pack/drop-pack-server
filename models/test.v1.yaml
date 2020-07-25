@@ -1,8 +1,0 @@
-title: test
-type: object
-properties:
-  id:
-    type: string
-x-examples:
-  example-1: {}
-description: ''
