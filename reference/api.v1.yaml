@@ -1,0 +1,123 @@
+openapi: 3.0.0
+info:
+  title: DropPack API
+  version: '1.0'
+servers: []
+paths:
+  /upload:
+    post:
+      summary: Upload
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/upload-created'
+              examples:
+                example-1:
+                  value:
+                    result:
+                      code: SUCCESS
+                      message: Successfully written the file to storage
+                    file:
+                      name: test.txt
+                      size: 1702
+        '500':
+          description: Internal Server Error
+      operationId: post-file
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: file_name
+          description: |
+            The name that the file should be saved
+          required: true
+      security:
+        - password: []
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type:
+                - integer
+                - number
+                - string
+                - object
+        description: The file that should be saved
+      description: Upload a file to the server
+  /delete:
+    delete:
+      summary: Delete file
+      tags: []
+      responses: {}
+      operationId: delete-file
+      description: Deletes the file specified form the server
+      security:
+        - password: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: file_name
+          description: The file name of the file to be deleted
+          required: true
+components:
+  schemas:
+    upload-created:
+      title: upload-created
+      type: object
+      x-examples:
+        example-1:
+          result:
+            code: SUCCESS
+            message: Successfully written the file to storage
+          file:
+            name: test.txt
+            size: 1702
+      properties:
+        result:
+          type: object
+          required:
+            - code
+            - message
+          properties:
+            code:
+              type: string
+              description: the result code
+            message:
+              type: string
+              description: |
+                the result message
+        file:
+          type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+              description: |
+                the name that the file was saved
+            size:
+              type: number
+              description: |
+                size of the uploaded file in bytes
+      required:
+        - result
+        - file
+    upload-EEXIST:
+      title: upload-EEXIST
+      type: object
+      properties:
+        id:
+          type: string
+  securitySchemes:
+    password:
+      name: password
+      type: apiKey
+      in: header
+      description: The password defiend in the config
+security:
+  - API Key - 1: []
